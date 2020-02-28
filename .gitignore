@@ -1,0 +1,17 @@
+ts/node_modules/
+ts/dist/
+ts/.nyc_output
+ts/coverage
+*.sum
+.vscode
+coverage.out
+coverage.html
+.idea/
+target/
+*.iml
+.project
+**/java/**/bin/
+**/java/**/.settings/
+**/csharp/**/bin/
+**/csharp/**/obj/
+**/csharp/**/.vs/

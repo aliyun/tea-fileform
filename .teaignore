@@ -1,0 +1,6 @@
+.git/
+.gitignore
+.teaignore
+.libraries.json
+libraries/
+ts/

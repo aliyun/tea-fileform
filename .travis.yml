@@ -1,18 +1,18 @@
 jobs:
   include:
-    # - language: csharp
-    #   mono: none
-    #   dist: xenial
-    #   env: TEA_UTIL_ENV="csharp"
-    # - language: java
-    #   jdk: openjdk8
-    #   env: TEA_UTIL_ENV="java"
-    # - language: go
-    #   go: 1.12.x
-    #   env: TEA_UTIL_ENV="go"
-    # - language: node_js
-    #   node_js: 12
-    #   env: TEA_UTIL_ENV="ts"
+    - language: csharp
+      mono: none
+      dist: xenial
+      env: TEA_UTIL_ENV="csharp"
+    - language: java
+      jdk: openjdk8
+      env: TEA_UTIL_ENV="java"
+    - language: go
+      go: 1.12.x
+      env: TEA_UTIL_ENV="go"
+    - language: node_js
+      node_js: 12
+      env: TEA_UTIL_ENV="ts"
     - language: swift
       os: osx
       osx_image: xcode11.3

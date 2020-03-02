@@ -11,15 +11,14 @@ let package = Package(
             targets: ["TeaFileForm"])
     ],
     dependencies: [
-        .package(url: "https://github.com/aliyun/tea-swift.git", from: "0.2.0"),
-        .package(url: "https://github.com/yannickl/AwaitKit.git", from: "5.2.0")
+        .package(url: "https://github.com/aliyun/tea-swift.git", from: "0.2.0")
     ],
     targets: [
         .target(
             name: "TeaFileForm",
-            dependencies: ["Tea", "AwaitKit"]),
+            dependencies: ["Tea"]),
         .testTarget(
             name: "TeaFileFormTests",
-            dependencies: ["TeaFileForm", "Tea", "AwaitKit"]),
+            dependencies: ["TeaFileForm", "Tea"]),
     ]
 )

@@ -10,6 +10,7 @@ coverage.html
 target/
 *.iml
 .project
+java/.classpath
 **/java/**/bin/
 **/java/**/.settings/
 **/csharp/**/bin/

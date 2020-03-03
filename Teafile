@@ -1,7 +1,7 @@
 {
   "scope": "alibabacloud",
   "name": "FileForm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "./main.tea",
   "releases": {
     "ts": "@ali/tea-fileform:^1.1.0",

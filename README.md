@@ -8,7 +8,8 @@ English | [简体中文](README-CN.md)
 
 - [Go](./golang/README.md)
 - [Java](./java/README.md)
-- [Swift](./java/README.md)
+- [Swift](./swift/README.md)
+- [.Net](./csharp/README.md)
 
 ## Issues
 

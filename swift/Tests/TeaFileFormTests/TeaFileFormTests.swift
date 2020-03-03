@@ -8,7 +8,6 @@ final class TeaFileFormTests: XCTestCase {
         let boundary: String = Client.getBoundary()
         let stream: TeaFileForm = Client.toFileForm([String: Any](), boundary)
 
-        print(stream.bytes.count)
         XCTAssertEqual(0, stream.bytes.count)
         stream.write(boundary.toBytes())
         XCTAssertEqual(32, stream.bytes.count)

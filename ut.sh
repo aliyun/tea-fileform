@@ -15,7 +15,7 @@ function run_swift {
   xcodebuild clean build -project TeaFileForm.xcodeproj -scheme "TeaFileForm-Package" -sdk "macosx" -destination "platform=OS X,arch=x86_64" -configuration Debug ONLY_ACTIVE_ARCH=NO test
   xcodebuild test -project TeaFileForm.xcodeproj -scheme "TeaFileForm-Package" -sdk "macosx" -destination "platform=OS X,arch=x86_64" -configuration Debug ONLY_ACTIVE_ARCH=NO test
   cd ../
-  # upload_codecov_report swift swift
+  upload_codecov_report swift swift
 }
 
 function run_go {

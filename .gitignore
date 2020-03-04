@@ -6,6 +6,7 @@ ts/coverage
 .vscode
 coverage.out
 coverage.html
+coverage.txt
 .idea/
 target/
 *.iml

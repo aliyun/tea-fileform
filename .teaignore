@@ -2,5 +2,13 @@
 .gitignore
 .teaignore
 .libraries.json
-libraries/
-ts/
+libraries
+ts
+csharp
+golang
+java
+swift
+.travis.yml
+README-CN.md
+README.md
+ut.sh

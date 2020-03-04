@@ -42,10 +42,12 @@ public class TeaFileForm {
                     return self.next(endStr: "\r\n")
                 }
                 let range = dataLen < offset + count ? offset..<(dataLen - offset) : offset..<count
-                let readContent: Data = (self.stream?.subdata(in: range)) ?? Data("".toBytes())
-                self.bytes = self.bytes + readContent.bytes
-                self.readPos = self.readPos + readContent.bytes.count
-                return readContent.count
+                let data: Data = self.stream!
+                var readContentBytes: [UInt8] = [UInt8](repeating: 0, count: data.count)
+                data.copyBytes(to: &readContentBytes, from: range)
+                self.bytes = self.bytes + readContentBytes
+                self.readPos = self.readPos + readContentBytes.count
+                return readContentBytes.count
             } else {
                 return self.next(endStr: "\r\n")
             }
@@ -90,7 +92,6 @@ public class TeaFileForm {
             } else {
                 return 0
             }
-            return self.bytes.count
         }
         return 0
     }

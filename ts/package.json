@@ -33,8 +33,5 @@
   "files": [
     "dist",
     "src"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npm.alibaba-inc.com"
-  }
+  ]
 }

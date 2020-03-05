@@ -15,9 +15,10 @@ public class FileFormInputStreamTest {
         FileFormInputStream fileFormInputStream = new FileFormInputStream(new HashMap<>(), "test");
         Assert.assertEquals(-1, fileFormInputStream.read());
 
+        fileFormInputStream.reset();
         byte[] bytes = new byte[32];
         int index = fileFormInputStream.read(bytes);
-        Assert.assertEquals(-1, index);
+        Assert.assertEquals(10, index);
 
         Map<String, Object> map = new HashMap<>();
         map.put("body", "This is body test. This sentence must be long");
@@ -27,32 +28,32 @@ public class FileFormInputStreamTest {
         fileField.content = new ByteArrayInputStream("This is file test. This sentence must be long".getBytes("UTF-8"));
         fileField.contentType = "txt";
         fileField.filename = "test.txt";
-        map.put("file", fileField.toMap());
+        map.put("file", fileField);
         fileField = new FileField();
         fileField.contentType = "txt";
         fileField.filename = "test.txt";
-        map.put("nullContentFile", fileField.toMap());
+        map.put("nullContentFile", fileField);
         fileField = new FileField();
         fileField.filename = "test.txt";
-        map.put("nullContentType", fileField.toMap());
+        map.put("nullContentType", fileField);
         fileField = new FileField();
-        map.put("nullFile", fileField.toMap());
+        map.put("nullFile", fileField);
         fileFormInputStream = new FileFormInputStream(map, "test");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         while ((index = fileFormInputStream.read(bytes)) != -1) {
             byteArrayOutputStream.write(bytes, 0, index);
         }
-
-        Assert.assertEquals("--test\r\n" +
-                "Content-Disposition: form-data; name=\"file\"; filename=\"test.txt\"\r\n" +
-                "Content-Type: null\r\n\r\n" +
-                "This is file test. This sentence must be long\r\n" +
+        Assert.assertEquals(
                 "--test\r\n" +
-                "Content-Disposition: form-data; name=\"query\"\r\n\r\n" +
-                "test\r\n" +
-                "--test\r\n" +
-                "Content-Disposition: form-data; name=\"body\"\r\n\r\n" +
-                "This is body test. This sentence must be long\r\n" +
-                "--test--\r\n", new String(byteArrayOutputStream.toByteArray(), "UTF-8"));
+                        "Content-Disposition: form-data; name=\"query\"\r\n\r\n" +
+                        "test\r\n" +
+                        "--test\r\n" +
+                        "Content-Disposition: form-data; name=\"body\"\r\n\r\n" +
+                        "This is body test. This sentence must be long\r\n" +
+                        "--test\r\n" +
+                        "Content-Disposition: form-data; name=\"file\"; filename=\"test.txt\"\r\n" +
+                        "Content-Type: txt\r\n\r\n" +
+                        "This is file test. This sentence must be long\r\n" +
+                        "--test--\r\n", new String(byteArrayOutputStream.toByteArray(), "UTF-8"));
     }
 }

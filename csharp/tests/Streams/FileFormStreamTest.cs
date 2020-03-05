@@ -20,12 +20,12 @@ namespace tests.Streams
             Assert.True(fileFormStream.CanRead);
             Assert.False(fileFormStream.CanSeek);
             Assert.False(fileFormStream.CanWrite);
-            Assert.Throws<NotImplementedException>(() => { long i = fileFormStream.Length; });
-            Assert.Throws<NotImplementedException>(() => { fileFormStream.Position = 1; });
-            Assert.Throws<NotImplementedException>(() => { long i = fileFormStream.Position; });
+            fileFormStream.Position = 1;
+            Assert.Equal(1, fileFormStream.Position);
+            fileFormStream.SetLength(2);
+            Assert.Equal(2, fileFormStream.Length);
             Assert.Throws<NotImplementedException>(() => { fileFormStream.Flush(); });
             Assert.Throws<NotImplementedException>(() => { fileFormStream.Seek(0, System.IO.SeekOrigin.Begin); });
-            Assert.Throws<NotImplementedException>(() => { fileFormStream.SetLength(1); });
             Assert.Throws<NotImplementedException>(() => { fileFormStream.Write(new byte[1024], 0, 1024); });
         }
 

@@ -25,6 +25,10 @@ namespace AlibabaCloud.SDK.TeaFileform.Streams
 
         private bool streaming;
 
+        private long position;
+
+        private long length;
+
         public FileFormStream(Dictionary<string, object> form, string boundary)
         {
             this.form = form;
@@ -40,17 +44,17 @@ namespace AlibabaCloud.SDK.TeaFileform.Streams
 
         public override bool CanWrite { get { return false; } }
 
-        public override long Length { get { throw new NotImplementedException(); } }
+        public override long Length { get { return length; } }
 
         public override long Position
         {
             get
             {
-                throw new NotImplementedException();
+                return position;
             }
             set
             {
-                throw new NotImplementedException();
+                position = value;
             }
         }
 
@@ -71,10 +75,9 @@ namespace AlibabaCloud.SDK.TeaFileform.Streams
                 else
                 {
                     streaming = false;
-                    if (streamingStream != null)
+                    if (streamingStream != null && streamingStream.CanSeek)
                     {
-                        streamingStream.Flush();
-                        streamingStream.Close();
+                        streamingStream.Seek(0, SeekOrigin.Begin);
                     }
                     streamingStream = null;
                     byte[] bytesFileEnd = Encoding.UTF8.GetBytes("\r\n");
@@ -113,7 +116,7 @@ namespace AlibabaCloud.SDK.TeaFileform.Streams
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.Append("--").Append(boundary).Append("\r\n");
                     stringBuilder.Append("Content-Disposition: form-data; name=\"").Append(name).Append("\"\r\n\r\n");
-                    stringBuilder.Append(PercentEncode(fieldValue.ToString())).Append("\r\n");
+                    stringBuilder.Append(fieldValue.ToString()).Append("\r\n");
                     byte[] formBytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
                     for (int i = 0; i < formBytes.Length; i++)
                     {
@@ -194,7 +197,7 @@ namespace AlibabaCloud.SDK.TeaFileform.Streams
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.Append("--").Append(boundary).Append("\r\n");
                     stringBuilder.Append("Content-Disposition: form-data; name=\"").Append(name).Append("\"\r\n\r\n");
-                    stringBuilder.Append(PercentEncode(fieldValue.ToString())).Append("\r\n");
+                    stringBuilder.Append(fieldValue.ToString()).Append("\r\n");
                     byte[] formBytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
                     for (int i = 0; i < formBytes.Length; i++)
                     {
@@ -228,7 +231,7 @@ namespace AlibabaCloud.SDK.TeaFileform.Streams
 
         public override void SetLength(long value)
         {
-            throw new NotImplementedException();
+            length = value;
         }
 
         public override void Write(byte[] buffer, int offset, int count)

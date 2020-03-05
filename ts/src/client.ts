@@ -57,7 +57,7 @@ class FileFormStream extends Readable {
         fieldValue.content instanceof Readable) {
         let body =
           `--${separator}\r\n` +
-          `Content-Disposition: form-data; name="${name}"; filename=${fieldValue.filename}\r\n` +
+          `Content-Disposition: form-data; name="${name}"; filename="${fieldValue.filename}"\r\n` +
           `Content-Type: ${fieldValue.contentType}\r\n\r\n`;
         this.push(Buffer.from(body));
         this.streaming = true;
@@ -72,7 +72,7 @@ class FileFormStream extends Readable {
       } else {
         this.push(Buffer.from(`--${separator}\r\n` +
           `Content-Disposition: form-data; name="${name}"\r\n\r\n` +
-          `${encodeURIComponent(fieldValue)}\r\n`));
+          `${fieldValue}\r\n`));
         this.index++;
       }
     } else {

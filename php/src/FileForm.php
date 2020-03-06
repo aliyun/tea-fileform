@@ -217,7 +217,11 @@ class FileFormStream implements StreamInterface
      */
     public function eof()
     {
-        // TODO: Implement eof() method.
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
+        return feof($this->stream);
     }
 
     /**
@@ -291,5 +295,21 @@ class FileFormStream implements StreamInterface
         $meta = stream_get_meta_data($this->stream);
 
         return isset($meta[$key]) ? $meta[$key] : null;
+    }
+}
+
+class FileField extends Model
+{
+    public $filename;
+    public $contentType;
+    public $content;
+
+    public function __construct()
+    {
+        $this->_required = [
+            "filename"    => true,
+            "contentType" => true,
+            "content"     => true
+        ];
     }
 }

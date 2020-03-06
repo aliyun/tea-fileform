@@ -52,8 +52,8 @@ class FileFormStream extends Readable {
     if (this.index < this.keys.length) {
       const name = this.keys[this.index];
       const fieldValue = this.form[name];
-      if (fieldValue.filename &&
-        fieldValue.contentType &&
+      if (typeof fieldValue.filename === 'string' &&
+        typeof fieldValue.contentType === 'string' &&
         fieldValue.content instanceof Readable) {
         let body =
           `--${separator}\r\n` +

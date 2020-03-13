@@ -2,7 +2,7 @@ English | [简体中文](README-CN.md)
 
 ![](https://aliyunsdk-pages.alicdn.com/icons/AlibabaCloud.svg)
 
-## Aliyun Tea File Library for Swift
+## Alibaba Cloud Tea File Library for Swift
 
 ## Installation
 

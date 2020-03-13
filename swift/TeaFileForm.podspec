@@ -3,7 +3,7 @@ Pod::Spec.new do |spec|
   spec.name         = "TeaFileForm"
   spec.version      = "0.1.0"
   spec.license      = "Apache 2.0"
-  spec.summary      = "Aliyun Tea File Library for Swift"
+  spec.summary      = "Alibaba Cloud Tea File Library for Swift"
   spec.homepage     = "https://github.com/alibabacloud-sdk-swift/tea-fileform"
   spec.author       = { "Alibaba Cloud SDK" => "sdk-team@alibabacloud.com" }
 

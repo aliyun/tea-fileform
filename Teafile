@@ -9,7 +9,7 @@
     "csharp": "AlibabaCloud.SDK.TeaFileform:0.0.2",
     "ts": "@alicloud/tea-fileform:1.0.0",
     "java": "com.aliyun:tea-fileform:0.0.2",
-    "php": "alibabacloud/tea-fileform:^0.1.0"
+    "php": "alibabacloud/tea-fileform:^0.2.0"
   },
   "java": {
 	"package": "com.aliyun.fileform"
@@ -19,7 +19,7 @@
     "className": "Client"
   },
   "php": {
-    "namespace": "AlibabaCloud.Tea.FileForm",
-		"className": "FileForm"
-  },
+    "package": "AlibabaCloud.Tea.FileForm",
+		"clientName": "FileForm"
+  }
 }

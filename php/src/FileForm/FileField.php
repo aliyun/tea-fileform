@@ -1,6 +1,6 @@
 <?php
 
-namespace AlibabaCloud\Tea\FileForm;
+namespace AlibabaCloud\Tea\FileForm\FileForm;
 
 use AlibabaCloud\Tea\Model;
 

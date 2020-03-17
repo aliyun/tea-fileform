@@ -4,6 +4,7 @@ namespace AlibabaCloud\Tea\FileForm;
 
 use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
+use AlibabaCloud\Tea\FileForm\FileForm\FileField;
 
 class FileFormStream implements StreamInterface
 {

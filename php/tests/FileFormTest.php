@@ -2,7 +2,7 @@
 
 namespace AlibabaCloud\Tea\FileForm\Tests;
 
-use AlibabaCloud\Tea\FileForm\FileField;
+use AlibabaCloud\Tea\FileForm\FileForm\FileField;
 use AlibabaCloud\Tea\FileForm\FileForm;
 use AlibabaCloud\Tea\FileForm\FileFormStream;
 use GuzzleHttp\Psr7\Stream;

@@ -6,7 +6,7 @@ class FileForm
 {
     public static function getBoundary()
     {
-        return strval(mt_rand(10000000000000, 99999999999999));
+        return (string) (mt_rand(10000000000000, 99999999999999));
     }
 
     public static function toFileForm($map, $boundary)

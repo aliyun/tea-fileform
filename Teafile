@@ -12,14 +12,14 @@
     "php": "alibabacloud/tea-fileform:^0.2.0"
   },
   "java": {
-	"package": "com.aliyun.fileform"
+    "package": "com.aliyun.fileform"
   },
-  "csharp":{
+  "csharp": {
     "namespace": "AlibabaCloud.SDK.TeaFileform",
     "className": "Client"
   },
   "php": {
     "package": "AlibabaCloud.Tea.FileForm",
-		"clientName": "FileForm"
+    "clientName": "FileForm"
   }
 }

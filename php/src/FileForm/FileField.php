@@ -13,9 +13,9 @@ class FileField extends Model
     public function __construct()
     {
         $this->_required = [
-            "filename"    => true,
-            "contentType" => true,
-            "content"     => true
+            'filename'    => true,
+            'contentType' => true,
+            'content'     => true,
         ];
     }
 }

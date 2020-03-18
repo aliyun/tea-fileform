@@ -2,27 +2,26 @@
 
 namespace AlibabaCloud\Tea\FileForm;
 
+use AlibabaCloud\Tea\FileForm\FileForm\FileField;
 use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
-use AlibabaCloud\Tea\FileForm\FileForm\FileField;
 
 class FileFormStream implements StreamInterface
 {
+    /**
+     * @var resource
+     */
+    public $stream;
     private $index     = 0;
     private $form      = [];
-    private $boundary  = "";
+    private $boundary  = '';
     private $streaming = false;
     private $keys      = [];
 
     /**
      * @var Stream
      */
-    private $currStream = null;
-
-    /**
-     * @var resource
-     */
-    public $stream;
+    private $currStream;
 
     private $size;
     private $uri;
@@ -38,6 +37,20 @@ class FileFormStream implements StreamInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        try {
+            $this->seek(0);
+
+            return (string) stream_get_contents($this->stream);
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
+
+    /**
      * @param int $length
      *
      * @return false|int|string
@@ -45,20 +58,21 @@ class FileFormStream implements StreamInterface
     public function read($length)
     {
         if ($this->streaming) {
-            if ($this->currStream !== null) {
-                /* @var string $content */
+            if (null !== $this->currStream) {
+                // @var string $content
                 $content = $this->currStream->read($length);
-                if (false !== $content && $content !== "") {
+                if (false !== $content && '' !== $content) {
                     fwrite($this->stream, $content);
-                    return strlen($content);
-                } else {
-                    return $this->next("\r\n");
+
+                    return \strlen($content);
                 }
-            } else {
+
                 return $this->next("\r\n");
             }
+
+            return $this->next("\r\n");
         }
-        $keysCount = count($this->keys);
+        $keysCount = \count($this->keys);
         if ($this->index > $keysCount) {
             return 0;
         }
@@ -73,28 +87,30 @@ class FileFormStream implements StreamInterface
                     if ($allNotEmpty) {
                         $this->currStream = $field->content;
 
-                        $str = "--" . $this->boundary . "\r\n" .
-                            "Content-Disposition: form-data; name=\"" . $name . "\"; filename=" . $field->filename . "\r\n" .
-                            "Content-Type: " . $field->contentType . "\r\n\r\n";
+                        $str = '--' . $this->boundary . "\r\n" .
+                            'Content-Disposition: form-data; name="' . $name . '"; filename=' . $field->filename . "\r\n" .
+                            'Content-Type: ' . $field->contentType . "\r\n\r\n";
                         $this->write($str);
-                        return strlen($str);
-                    } else {
-                        return $this->next("\r\n");
+
+                        return \strlen($str);
                     }
-                } else {
-                    $val = rawurlencode($field);
-                    $str = "--" . $this->boundary . "\r\n" .
-                        "Content-Disposition: form-data; name=\"" . $name . "\"\r\n\r\n" .
-                        $val . "\r\n\r\n";
-                    fwrite($this->stream, $str);
-                    return strlen($str);
+
+                    return $this->next("\r\n");
                 }
-            } else if ($this->index == $keysCount) {
-                return $this->next("--" . $this->boundary . "--\r\n");
+                $val = rawurlencode($field);
+                $str = '--' . $this->boundary . "\r\n" .
+                        'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n" .
+                        $val . "\r\n\r\n";
+                fwrite($this->stream, $str);
+
+                return \strlen($str);
+            } elseif ($this->index == $keysCount) {
+                return $this->next('--' . $this->boundary . "--\r\n");
             } else {
                 return 0;
             }
         }
+
         return 0;
     }
 
@@ -104,35 +120,13 @@ class FileFormStream implements StreamInterface
         $this->rewind();
     }
 
-    private function next($endStr)
-    {
-        $this->streaming = false;
-        $this->index++;
-        $this->write($endStr);
-        $this->currStream = null;
-        return strlen($endStr);
-    }
-
     /**
-     * @inheritDoc
-     */
-    public function __toString()
-    {
-        try {
-            $this->seek(0);
-            return (string)stream_get_contents($this->stream);
-        } catch (\Exception $e) {
-            return '';
-        }
-    }
-
-    /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function close()
     {
         if (isset($this->stream)) {
-            if (is_resource($this->stream)) {
+            if (\is_resource($this->stream)) {
                 fclose($this->stream);
             }
             $this->detach();
@@ -140,7 +134,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function detach()
     {
@@ -156,11 +150,11 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getSize()
     {
-        if ($this->size !== null) {
+        if (null !== $this->size) {
             return $this->size;
         }
 
@@ -176,6 +170,7 @@ class FileFormStream implements StreamInterface
         $stats = fstat($this->stream);
         if (isset($stats['size'])) {
             $this->size = $stats['size'];
+
             return $this->size;
         }
 
@@ -183,7 +178,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function tell()
     {
@@ -193,7 +188,7 @@ class FileFormStream implements StreamInterface
 
         $result = ftell($this->stream);
 
-        if ($result === false) {
+        if (false === $result) {
             throw new \RuntimeException('Unable to determine stream position');
         }
 
@@ -201,7 +196,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function eof()
     {
@@ -213,7 +208,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isSeekable()
     {
@@ -221,11 +216,11 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function seek($offset, $whence = SEEK_SET)
     {
-        $whence = (int)$whence;
+        $whence = (int) $whence;
 
         if (!isset($this->stream)) {
             throw new \RuntimeException('Stream is detached');
@@ -233,14 +228,14 @@ class FileFormStream implements StreamInterface
         if (!$this->seekable) {
             throw new \RuntimeException('Stream is not seekable');
         }
-        if (fseek($this->stream, $offset, $whence) === -1) {
+        if (-1 === fseek($this->stream, $offset, $whence)) {
             throw new \RuntimeException('Unable to seek to stream position '
                 . $offset . ' with whence ' . var_export($whence, true));
         }
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -248,7 +243,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isWritable()
     {
@@ -256,7 +251,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isReadable()
     {
@@ -264,7 +259,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getContents()
     {
@@ -272,7 +267,7 @@ class FileFormStream implements StreamInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getMetadata($key = null)
     {
@@ -283,5 +278,15 @@ class FileFormStream implements StreamInterface
         $meta = stream_get_meta_data($this->stream);
 
         return isset($meta[$key]) ? $meta[$key] : null;
+    }
+
+    private function next($endStr)
+    {
+        $this->streaming = false;
+        ++$this->index;
+        $this->write($endStr);
+        $this->currStream = null;
+
+        return \strlen($endStr);
     }
 }

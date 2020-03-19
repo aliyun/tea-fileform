@@ -97,18 +97,19 @@ class FileFormStream implements StreamInterface
 
                     return $this->next("\r\n");
                 }
-                $val = rawurlencode($field);
+                $val = $field;
                 $str = '--' . $this->boundary . "\r\n" .
-                        'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n" .
-                        $val . "\r\n\r\n";
+                    'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n" .
+                    $val . "\r\n\r\n";
                 fwrite($this->stream, $str);
 
                 return \strlen($str);
-            } elseif ($this->index == $keysCount) {
-                return $this->next('--' . $this->boundary . "--\r\n");
-            } else {
-                return 0;
             }
+            if ($this->index == $keysCount) {
+                return $this->next('--' . $this->boundary . "--\r\n");
+            }
+
+            return 0;
         }
 
         return 0;

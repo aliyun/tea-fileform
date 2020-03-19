@@ -64,4 +64,24 @@ class FileFormTest extends TestCase
 
         $this->assertEquals($target, $result);
     }
+
+    public function testReadFile()
+    {
+        $fileField              = new FileField();
+        $fileField->filename    = 'composer.json';
+        $fileField->contentType = 'application/json';
+        $fileField->content     = new Stream(fopen(__DIR__ . '/../composer.json', 'r'));
+        $map                    = [
+            'name' => '测试图片',
+            'type' => 'application/json',
+            'json_file'  => $fileField,
+        ];
+
+        $boundary   = FileForm::getBoundary();
+        $fileStream = FileForm::toFileForm($map, $boundary);
+        do {
+            $readLength = $fileStream->read(1024);
+        } while (0 != $readLength);
+        dump($fileStream->getContents());
+    }
 }

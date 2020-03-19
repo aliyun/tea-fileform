@@ -23,6 +23,18 @@ class FileFormTest extends TestCase
         $this->assertTrue(\strlen($boundary) === $stream->getSize());
     }
 
+    public function testSet()
+    {
+        $fileField = new FileField([
+            'filename'    => 'fake filename',
+            'contentType' => 'content type',
+            'content'     => null,
+        ]);
+
+        $this->assertEquals('fake filename', $fileField->filename);
+        $this->assertEquals('content type', $fileField->contentType);
+    }
+
     public function testRead()
     {
         $fileField              = new FileField();

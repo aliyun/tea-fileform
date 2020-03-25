@@ -55,9 +55,6 @@ class FileFormTest extends TestCase
         ];
 
         $stream = FileForm::toFileForm($map, 'testBoundary');
-        do {
-            $readLength = $stream->read(1024);
-        } while (0 != $readLength);
 
         $result = $stream->getContents();
         $target = "--testBoundary\r\nContent-Disposition: form-data; name=\"haveFile\"; filename=haveContent\r\nContent-Type: contentType\r\n\r\nThis is file test. This sentence must be long\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n\r\n\r\n\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"testKey\"\r\n\r\ntestValue\r\n\r\n\r\n--testBoundary--\r\n";
@@ -72,16 +69,13 @@ class FileFormTest extends TestCase
         $fileField->contentType = 'application/json';
         $fileField->content     = new Stream(fopen(__DIR__ . '/../composer.json', 'r'));
         $map                    = [
-            'name' => '测试图片',
-            'type' => 'application/json',
-            'json_file'  => $fileField,
+            'name'      => 'json_file',
+            'type'      => 'application/json',
+            'json_file' => $fileField,
         ];
 
         $boundary   = FileForm::getBoundary();
         $fileStream = FileForm::toFileForm($map, $boundary);
-        do {
-            $readLength = $fileStream->read(1024);
-        } while (0 != $readLength);
-        dump($fileStream->getContents());
+        $this->assertTrue(false !== strpos($fileStream->getContents(), 'json_file'));
     }
 }

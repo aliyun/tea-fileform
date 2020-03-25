@@ -6,6 +6,10 @@ use AlibabaCloud\Tea\FileForm\FileForm\FileField;
 use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class FileFormStream implements StreamInterface
 {
     /**
@@ -35,13 +39,13 @@ class FileFormStream implements StreamInterface
         $this->form     = $map;
         $this->boundary = $boundary;
         $this->keys     = array_keys($map);
-        sort($this->keys);
         do {
             $read = $this->readForm(1024);
-        } while ('' !== $read);
+        } while (null !== $read);
         $meta           = stream_get_meta_data($this->stream);
         $this->seekable = $meta['seekable'];
         $this->uri      = $this->getMetadata('uri');
+        $this->seek(0);
         $this->seek(0);
     }
 
@@ -69,7 +73,7 @@ class FileFormStream implements StreamInterface
      *
      * @return false|int|string
      */
-    public function readForm($length): string
+    public function readForm($length)
     {
         if ($this->streaming) {
             if (null !== $this->currStream) {
@@ -84,11 +88,11 @@ class FileFormStream implements StreamInterface
                 return $this->next("\r\n");
             }
 
-            return $this->next("\r\n");
+            return $this->next();
         }
         $keysCount = \count($this->keys);
         if ($this->index > $keysCount) {
-            return '';
+            return null;
         }
         if ($keysCount > 0) {
             if ($this->index < $keysCount) {
@@ -97,24 +101,23 @@ class FileFormStream implements StreamInterface
                 $name  = $this->keys[$this->index];
                 $field = $this->form[$name];
                 if (!empty($field) && $field instanceof FileField) {
-                    $allNotEmpty = !empty($field->filename) && !empty($field->contentType) && $field->content;
-                    if ($allNotEmpty) {
+                    if (!empty($field->content)) {
                         $this->currStream = $field->content;
 
                         $str = '--' . $this->boundary . "\r\n" .
-                            'Content-Disposition: form-data; name="' . $name . '"; filename=' . $field->filename . "\r\n" .
+                            'Content-Disposition: form-data; name="' . $name . '"; filename="' . $field->filename . "\"\r\n" .
                             'Content-Type: ' . $field->contentType . "\r\n\r\n";
                         $this->write($str);
 
                         return $str;
                     }
 
-                    return $this->next("\r\n");
+                    return $this->next();
                 }
                 $val = $field;
                 $str = '--' . $this->boundary . "\r\n" .
                     'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n" .
-                    $val . "\r\n\r\n";
+                    $val . "\r\n";
                 fwrite($this->stream, $str);
 
                 return $str;
@@ -123,10 +126,10 @@ class FileFormStream implements StreamInterface
                 return $this->next('--' . $this->boundary . "--\r\n");
             }
 
-            return '';
+            return null;
         }
 
-        return '';
+        return null;
     }
 
     public function getContents()
@@ -247,8 +250,7 @@ class FileFormStream implements StreamInterface
             throw new \RuntimeException('Stream is not seekable');
         }
         if (-1 === fseek($this->stream, $offset, $whence)) {
-            throw new \RuntimeException('Unable to seek to stream position '
-                . $offset . ' with whence ' . var_export($whence, true));
+            throw new \RuntimeException('Unable to seek to stream position ' . $offset . ' with whence ' . var_export($whence, true));
         }
     }
 

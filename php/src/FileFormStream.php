@@ -11,7 +11,7 @@ class FileFormStream implements StreamInterface
     /**
      * @var resource
      */
-    public $stream;
+    private $stream;
     private $index     = 0;
     private $form      = [];
     private $boundary  = '';
@@ -26,6 +26,8 @@ class FileFormStream implements StreamInterface
     private $size;
     private $uri;
     private $seekable;
+    private $readable = true;
+    private $writable = true;
 
     public function __construct($map, $boundary)
     {
@@ -34,11 +36,23 @@ class FileFormStream implements StreamInterface
         $this->boundary = $boundary;
         $this->keys     = array_keys($map);
         sort($this->keys);
+        do {
+            $read = $this->readForm(1024);
+        } while ('' !== $read);
+        $meta           = stream_get_meta_data($this->stream);
+        $this->seekable = $meta['seekable'];
+        $this->uri      = $this->getMetadata('uri');
+        $this->seek(0);
     }
 
     /**
-     * {@inheritdoc}
+     * Closes the stream when the destructed.
      */
+    public function __destruct()
+    {
+        $this->close();
+    }
+
     public function __toString()
     {
         try {
@@ -55,7 +69,7 @@ class FileFormStream implements StreamInterface
      *
      * @return false|int|string
      */
-    public function read($length)
+    public function readForm($length): string
     {
         if ($this->streaming) {
             if (null !== $this->currStream) {
@@ -64,7 +78,7 @@ class FileFormStream implements StreamInterface
                 if (false !== $content && '' !== $content) {
                     fwrite($this->stream, $content);
 
-                    return \strlen($content);
+                    return $content;
                 }
 
                 return $this->next("\r\n");
@@ -74,7 +88,7 @@ class FileFormStream implements StreamInterface
         }
         $keysCount = \count($this->keys);
         if ($this->index > $keysCount) {
-            return 0;
+            return '';
         }
         if ($keysCount > 0) {
             if ($this->index < $keysCount) {
@@ -92,37 +106,44 @@ class FileFormStream implements StreamInterface
                             'Content-Type: ' . $field->contentType . "\r\n\r\n";
                         $this->write($str);
 
-                        return \strlen($str);
+                        return $str;
                     }
 
                     return $this->next("\r\n");
                 }
-                $val = rawurlencode($field);
+                $val = $field;
                 $str = '--' . $this->boundary . "\r\n" .
-                        'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n" .
-                        $val . "\r\n\r\n";
+                    'Content-Disposition: form-data; name="' . $name . "\"\r\n\r\n" .
+                    $val . "\r\n\r\n";
                 fwrite($this->stream, $str);
 
-                return \strlen($str);
-            } elseif ($this->index == $keysCount) {
-                return $this->next('--' . $this->boundary . "--\r\n");
-            } else {
-                return 0;
+                return $str;
             }
+            if ($this->index == $keysCount) {
+                return $this->next('--' . $this->boundary . "--\r\n");
+            }
+
+            return '';
         }
 
-        return 0;
+        return '';
     }
 
-    public function write($string)
+    public function getContents()
     {
-        fwrite($this->stream, $string);
-        $this->rewind();
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
+        $contents = stream_get_contents($this->stream);
+
+        if (false === $contents) {
+            throw new \RuntimeException('Unable to read stream contents');
+        }
+
+        return $contents;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function close()
     {
         if (isset($this->stream)) {
@@ -133,9 +154,6 @@ class FileFormStream implements StreamInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function detach()
     {
         if (!isset($this->stream)) {
@@ -149,9 +167,6 @@ class FileFormStream implements StreamInterface
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSize()
     {
         if (null !== $this->size) {
@@ -177,9 +192,30 @@ class FileFormStream implements StreamInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function isReadable()
+    {
+        return $this->readable;
+    }
+
+    public function isWritable()
+    {
+        return $this->writable;
+    }
+
+    public function isSeekable()
+    {
+        return $this->seekable;
+    }
+
+    public function eof()
+    {
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+
+        return feof($this->stream);
+    }
+
     public function tell()
     {
         if (!isset($this->stream)) {
@@ -195,29 +231,11 @@ class FileFormStream implements StreamInterface
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function eof()
+    public function rewind()
     {
-        if (!isset($this->stream)) {
-            throw new \RuntimeException('Stream is detached');
-        }
-
-        return feof($this->stream);
+        $this->seek(0);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isSeekable()
-    {
-        return $this->seekable;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function seek($offset, $whence = SEEK_SET)
     {
         $whence = (int) $whence;
@@ -234,41 +252,50 @@ class FileFormStream implements StreamInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function read($length)
     {
-        rewind($this->stream);
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+        if (!$this->readable) {
+            throw new \RuntimeException('Cannot read from non-readable stream');
+        }
+        if ($length < 0) {
+            throw new \RuntimeException('Length parameter cannot be negative');
+        }
+
+        if (0 === $length) {
+            return '';
+        }
+
+        $string = fread($this->stream, $length);
+        if (false === $string) {
+            throw new \RuntimeException('Unable to read from stream');
+        }
+
+        return $string;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isWritable()
+    public function write($string)
     {
-        return true;
+        if (!isset($this->stream)) {
+            throw new \RuntimeException('Stream is detached');
+        }
+        if (!$this->writable) {
+            throw new \RuntimeException('Cannot write to a non-writable stream');
+        }
+
+        // We can't know the size after writing anything
+        $this->size = null;
+        $result     = fwrite($this->stream, $string);
+
+        if (false === $result) {
+            throw new \RuntimeException('Unable to write to stream');
+        }
+
+        return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isReadable()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getContents()
-    {
-        return stream_get_contents($this->stream);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getMetadata($key = null)
     {
         if (!isset($this->stream)) {
@@ -280,13 +307,13 @@ class FileFormStream implements StreamInterface
         return isset($meta[$key]) ? $meta[$key] : null;
     }
 
-    private function next($endStr)
+    private function next($endStr = '')
     {
         $this->streaming = false;
         ++$this->index;
         $this->write($endStr);
         $this->currStream = null;
 
-        return \strlen($endStr);
+        return $endStr;
     }
 }

@@ -57,7 +57,7 @@ class FileFormTest extends TestCase
         $stream = FileForm::toFileForm($map, 'testBoundary');
 
         $result = $stream->getContents();
-        $target = "--testBoundary\r\nContent-Disposition: form-data; name=\"haveFile\"; filename=haveContent\r\nContent-Type: contentType\r\n\r\nThis is file test. This sentence must be long\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n\r\n\r\n\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"testKey\"\r\n\r\ntestValue\r\n\r\n\r\n--testBoundary--\r\n";
+        $target = "--testBoundary\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"testKey\"\r\n\r\ntestValue\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"haveFile\"; filename=\"haveContent\"\r\nContent-Type: contentType\r\n\r\nThis is file test. This sentence must be long\r\n--testBoundary--\r\n";
 
         $this->assertEquals($target, $result);
     }

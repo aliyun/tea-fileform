@@ -1,7 +1,7 @@
 model FileField {
-    filename: string,
-    contentType: string,
-    content: readable
+  filename: string(description='the name of the file'),
+  contentType: string(description='the MIME of the file'),
+  content: readable(description='the content of the file')
 }
 
 /**
@@ -12,5 +12,8 @@ static function getBoundary(): string;
 
 /**
  * Give a form and boundary string, wrap it to a readable stream
+ * @param form The form map
+ * @param boundary the boundary string
+ * @return the readable from file form
  */
 static function toFileForm(form: object, boundary: string): readable;

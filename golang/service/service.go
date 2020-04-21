@@ -31,13 +31,13 @@ type formFile struct {
 	end        bool
 }
 
-func GetBoundary() string {
-	return randStringBytes(14)
+func GetBoundary() *string {
+	return tea.String(randStringBytes(14))
 }
 
-func ToFileForm(body map[string]interface{}, boundary string) io.Reader {
+func ToFileForm(body map[string]interface{}, boundary *string) io.Reader {
 	out := bytes.NewBuffer(nil)
-	line := "--" + boundary + "\r\n"
+	line := "--" + tea.StringValue(boundary) + "\r\n"
 	forms := make(map[string]string)
 	files := make(map[string]map[string]interface{})
 	for key, value := range body {
@@ -76,7 +76,7 @@ func ToFileForm(body map[string]interface{}, boundary string) io.Reader {
 			StartField: strings.NewReader(start),
 		}
 		if len(files) == len(formFiles)+1 {
-			end := "\r\n\r\n--" + boundary + "--\r\n"
+			end := "\r\n\r\n--" + tea.StringValue(boundary) + "--\r\n"
 			formFile.EndField = strings.NewReader(end)
 		} else {
 			formFile.EndField = strings.NewReader("\r\n\r\n")

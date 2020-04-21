@@ -24,7 +24,7 @@ func Test_ToFileForm(t *testing.T) {
 			Content:     strings.NewReader("ok"),
 		},
 	}
-	res := ToFileForm(tea.ToMap(body), "28802961715230")
+	res := ToFileForm(tea.ToMap(body), tea.String("28802961715230"))
 	byt, err := ioutil.ReadAll(res)
 	utils.AssertNil(t, err)
 	utils.AssertEqual(t, string(byt), "--28802961715230\r\nContent-Disposition: "+
@@ -39,10 +39,15 @@ func Test_ToFileForm(t *testing.T) {
 			Content:     strings.NewReader("ok"),
 		},
 	}
-	res = ToFileForm(tea.ToMap(body1), "28802961715230")
+	res = ToFileForm(tea.ToMap(body1), tea.String("28802961715230"))
 	byt, err = ioutil.ReadAll(res)
 	utils.AssertNil(t, err)
 	utils.AssertEqual(t, string(byt), "--28802961715230\r\nContent-Disposition: form-data; "+
 		"name=\"ak\"\r\n\r\naccesskey\r\n--28802961715230\r\nContent-Disposition: "+
 		"form-data; name=\"file1\"; filename=\"a.jpg\"\r\nContent-Type: jpg\r\n\r\nok\r\n\r\n--28802961715230--\r\n")
+}
+
+func Test_GetBoundary(t *testing.T) {
+	bound := GetBoundary()
+	utils.AssertEqual(t, len(tea.StringValue(bound)), 14)
 }

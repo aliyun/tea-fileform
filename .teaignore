@@ -9,6 +9,7 @@ golang
 java
 swift
 php
+python
 .travis.yml
 README-CN.md
 README.md

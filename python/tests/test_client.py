@@ -8,6 +8,19 @@ class TestClient(unittest.TestCase):
         self.assertEqual(14, len(boundary))
 
     def test_to_file_from(self):
+        body = client.to_file_from({}, 'boundary')
+        self.assertEqual('--boundary--\r\n'.encode(), body)
+
+        form = {
+            'stringkey': 'string'
+        }
+        body = client.to_file_from(form, 'boundary')
+        content = "--boundary\r\n" +\
+                "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" +\
+                "string\r\n" +\
+                "--boundary--\r\n"
+        self.assertEqual(content.encode(), body)
+
         f = open('test_file.json', encoding='utf-8')
         file_field = client.FileField(
             filename='test_file.json',

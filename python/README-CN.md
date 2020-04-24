@@ -2,7 +2,7 @@
 
 ![](https://aliyunsdk-pages.alicdn.com/icons/AlibabaCloud.svg)
 
-## Alibaba Cloud Endpoint for Python
+## Alibaba Cloud Tea fileform for Python
 
 
 ## 安装

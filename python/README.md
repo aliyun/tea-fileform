@@ -1,7 +1,7 @@
 English | [简体中文](README-CN.md)
 ![](https://aliyunsdk-pages.alicdn.com/icons/AlibabaCloud.svg)
 
-## Alibaba Cloud Endpoint for Python
+## Alibaba Cloud Tea fileform for Python
 
 ## Installation
 - **Install with pip**

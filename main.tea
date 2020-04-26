@@ -1,6 +1,13 @@
+/**
+ * This is a stream module
+ */
+
+/**
+ * The model is for genrating stream 
+ */
 model FileField {
-  filename: string(description='the name of the file'),
-  contentType: string(description='the MIME of the file'),
+  filename: string(description='the name of the file',example='a.txt',default=''),
+  contentType: string(description='the MIME of the file',example='txt',default=''),
   content: readable(description='the content of the file')
 }
 

@@ -19,12 +19,12 @@ import os
 from setuptools import setup, find_packages
 
 """
-Setup module for tea-fileform.
+Setup module for alibabacloud-tea-fileform.
 Created on 4/02/2020
 @author: Alibaba Cloud
 """
 
-PACKAGE = "tea_fileform"
+PACKAGE = "alibabacloudteafileform"
 DESCRIPTION = "The tea-fileform module of alibabaCloud Python SDK."
 AUTHOR = "Alibaba Cloud"
 AUTHOR_EMAIL = "alibaba-cloud-sdk-dev-team@list.alibaba-inc.com"
@@ -62,4 +62,4 @@ setup_args = {
     )
 }
 
-setup(name='alibabacloud-tea-fileform', **setup_args)
+setup(name='alibabacloudteafileform', **setup_args)

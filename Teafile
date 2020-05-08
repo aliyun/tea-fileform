@@ -1,7 +1,7 @@
 {
   "scope": "alibabacloud",
   "name": "FileForm",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "./main.tea",
   "releases": {
     "go": "github.com/alibabacloud-go/tea-fileform/service:v1.0.0",
@@ -20,7 +20,8 @@
   },
   "php": {
     "package": "AlibabaCloud.Tea.FileForm",
-    "clientName": "FileForm"
+    "clientName": "FileForm",
+    "modelDirName": "FileForm"
   },
   "python": {
     "package": "alibabacloudteafileform",

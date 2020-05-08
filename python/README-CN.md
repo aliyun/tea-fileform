@@ -13,7 +13,7 @@
 
 ```bash
 # 安装 tea-fileform
-pip install alibabacloud-tea-fileform
+pip install alibabacloudteafileform
 ```
 
 ## 问题

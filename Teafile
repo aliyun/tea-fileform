@@ -1,10 +1,10 @@
 {
   "scope": "alibabacloud",
   "name": "FileForm",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "main": "./main.tea",
   "releases": {
-    "go": "github.com/alibabacloud-go/tea-fileform/service:v1.0.0",
+    "go": "github.com/alibabacloud-go/tea-fileform/service:v1.0.1",
     "csharp": "AlibabaCloud.SDK.TeaFileform:0.0.2",
     "ts": "@alicloud/tea-fileform:1.0.0",
     "java": "com.aliyun:tea-fileform:0.0.2",

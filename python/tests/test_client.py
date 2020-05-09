@@ -1,5 +1,5 @@
 import unittest
-from alibabacloudteafileform import client
+from alibabacloud_tea_fileform import client
 
 
 class TestClient(unittest.TestCase):

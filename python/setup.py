@@ -24,7 +24,7 @@ Created on 4/02/2020
 @author: Alibaba Cloud
 """
 
-PACKAGE = "alibabacloudteafileform"
+PACKAGE = "alibabacloud_tea_fileform"
 DESCRIPTION = "The tea-fileform module of alibabaCloud Python SDK."
 AUTHOR = "Alibaba Cloud"
 AUTHOR_EMAIL = "alibaba-cloud-sdk-dev-team@list.alibaba-inc.com"
@@ -62,4 +62,4 @@ setup_args = {
     )
 }
 
-setup(name='alibabacloudteafileform', **setup_args)
+setup(name='alibabacloud_tea_fileform', **setup_args)

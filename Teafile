@@ -9,7 +9,7 @@
     "ts": "@alicloud/tea-fileform:1.0.0",
     "java": "com.aliyun:tea-fileform:0.0.2",
     "php": "alibabacloud/tea-fileform:^0.3.0",
-    "python": "alibabacloudteafileform:0.0.1"
+    "python": "alibabacloud_tea_fileform:0.0.1"
   },
   "java": {
     "package": "com.aliyun.fileform"
@@ -24,7 +24,7 @@
     "modelDirName": "FileForm"
   },
   "python": {
-    "package": "alibabacloudteafileform",
+    "package": "alibabacloud_tea_fileform",
     "clientName": "client"
   }
 }

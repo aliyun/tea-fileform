@@ -4,7 +4,7 @@
   "version": "0.2.1",
   "main": "./main.tea",
   "releases": {
-    "go": "github.com/alibabacloud-go/tea-fileform/service:v1.0.2",
+    "go": "github.com/alibabacloud-go/tea-fileform/service:v1.1.0",
     "csharp": "AlibabaCloud.SDK.TeaFileform:0.0.2",
     "ts": "@alicloud/tea-fileform:1.0.0",
     "java": "com.aliyun:tea-fileform:0.0.2",

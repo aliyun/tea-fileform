@@ -16,7 +16,7 @@ class FileFormInputStream:
         self.files_keys = []
         self._to_map()
 
-        self.form_str = ''
+        self.form_str = b''
         self._build_str_forms()
         self.str_length = len(self.form_str)
 
@@ -34,12 +34,13 @@ class FileFormInputStream:
         for k, v in self.forms.items():
             # handle str
             form_str += str_fmt % (self.boundary, k, v)
-        self.form_str = form_str
+        self.form_str = form_str.encode('utf-8')
 
     def _get_stream_length(self):
         file_length = 0
         for k, ff in self.files.items():
-            field_length = len(ff.filename) + len(ff.content_type) + len(k) + len(self.boundary) + 78
+            field_length = len(ff.filename.encode('utf-8')) + len(ff.content_type) +\
+                           len(k.encode('utf-8')) + len(self.boundary) + 78
             file_length += os.path.getsize(ff.content.name) + field_length
 
         stream_length = self.str_length + file_length + len(self.boundary) + 6
@@ -56,9 +57,9 @@ class FileFormInputStream:
 
     def file_str(self, size):
         # handle file object
-        form_str = ''
+        form_str = b''
         start_fmt = '--%s\r\nContent-Disposition: form-data; name="%s";'
-        content_fmt = ' filename="%s"\r\nContent-Type: %s\r\n\r\n%s'
+        content_fmt = b' filename="%s"\r\nContent-Type: %s\r\n\r\n%s'
 
         if self.file_size_left:
             for key in self.files_keys[:]:
@@ -66,11 +67,11 @@ class FileFormInputStream:
                     break
                 file_field = self.files[key]
                 file_content = file_field.content.read(size)
-                if isinstance(file_content, bytes):
-                    file_content = file_content.decode('utf-8')
+                if isinstance(file_content, str):
+                    file_content = file_content.encode('utf-8')
 
                 if self.file_size_left <= size:
-                    form_str += '%s\r\n' % file_content
+                    form_str += b'%s\r\n' % file_content
                     self.file_size_left = 0
                     size -= len(file_content)
                     self.files_keys.remove(key)
@@ -86,20 +87,23 @@ class FileFormInputStream:
                 file_size = os.path.getsize(file_field.content.name)
                 self.file_size_left = file_size
                 file_content = file_field.content.read(size)
-                if isinstance(file_content, bytes):
-                    file_content = file_content.decode('utf-8')
+                if isinstance(file_content, str):
+                    file_content = file_content.encode('utf-8')
 
                 # build form_str
                 start = start_fmt % (self.boundary, key)
                 content = content_fmt % (
-                    file_field.filename, file_field.content_type, file_content)
+                    file_field.filename.encode('utf-8'),
+                    file_field.content_type.encode('utf-8'),
+                    file_content
+                )
                 if self.file_size_left < size:
-                    form_str += '%s%s\r\n' % (start, content)
+                    form_str += b'%s%s\r\n' % (start.encode('utf-8'), content)
                     self.file_size_left = 0
                     size -= len(file_content)
                     self.files_keys.remove(key)
                 else:
-                    form_str += '%s%s' % (start, content)
+                    form_str += b'%s%s' % (start.encode('utf-8'), content)
                     self.file_size_left -= size
                     size -= len(file_content)
 
@@ -125,8 +129,8 @@ class FileFormInputStream:
             form_str = self.file_str(size)
 
         if not self.form_str and not self.files_keys:
-            form_str += '--{}--\r\n'.format(self.boundary)
-        return form_str.encode('utf-8')
+            form_str += b'--%s--\r\n' % self.boundary.encode('utf-8')
+        return form_str
 
     def refresh_cursor(self):
         for ff in self.files.values():

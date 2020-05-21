@@ -16,7 +16,7 @@ class TestClient(unittest.TestCase):
 
     def test_to_file_from(self):
         # Test 1
-        body = Client.to_file_from({}, 'boundary')
+        body = Client.to_file_form({}, 'boundary')
         for i in body:
             self.assertEqual('--boundary--\r\n'.encode(), i)
 
@@ -24,7 +24,7 @@ class TestClient(unittest.TestCase):
             'stringkey1': 'string1',
             'stringkey2': 'string2'
         }
-        body = Client.to_file_from(form, 'boundary')
+        body = Client.to_file_form(form, 'boundary')
         content = "--boundary\r\n" + \
                   "Content-Disposition: form-data; name=\"stringkey1\"\r\n\r\n" + \
                   "string1\r\n" + \
@@ -51,7 +51,7 @@ class TestClient(unittest.TestCase):
             'stringkey': 'string',
             'filefield': file_field1
         }
-        body = Client.to_file_from(form, boundary)
+        body = Client.to_file_form(form, boundary)
 
         content = f"--{boundary}\r\n" + \
                   "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" + \
@@ -87,7 +87,7 @@ class TestClient(unittest.TestCase):
             'filefield1': file_field1,
             'filefield2': file_field2
         }
-        body = Client.to_file_from(form, boundary)
+        body = Client.to_file_form(form, boundary)
 
         content = f"--{boundary}\r\n" + \
                   "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" + \

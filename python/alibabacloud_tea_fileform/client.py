@@ -10,5 +10,5 @@ class Client:
         return result.zfill(14)
 
     @staticmethod
-    def to_file_from(form, boundary):
+    def to_file_form(form, boundary):
         return FileFormInputStream(form, boundary)

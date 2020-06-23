@@ -80,8 +80,9 @@ function run_python {
   # install
   cd python/tests || return 126
   pip install coverage
+  pip install alibabacloud-tea
 
-  coverage run --source="tea_fileform.client" run_test.py
+  coverage run --source="../alibabacloud_tea_fileform" run_test.py
   cd ../../
   upload_codecov_report python python
 }

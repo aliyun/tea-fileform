@@ -2,11 +2,11 @@ import unittest
 from alibabacloud_tea_fileform.client import Client
 from alibabacloud_tea_fileform.models import FileField
 
-file1 = 'tests/test_file.json'
-file2 = 'tests/test.txt'
+# file1 = 'tests/test_file.json'
+# file2 = 'tests/test.txt'
 
-# file1 = 'test_file.json'
-# file2 = 'test.txt'
+file1 = 'test_file.json'
+file2 = 'test.txt'
 
 
 class TestClient(unittest.TestCase):
@@ -53,16 +53,16 @@ class TestClient(unittest.TestCase):
         }
         body = Client.to_file_form(form, boundary)
 
-        content = f"--{boundary}\r\n" + \
+        content = "--{}\r\n".format(boundary) + \
                   "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" + \
                   "string\r\n" + \
-                  f"--{boundary}\r\n" + \
+                  "--{}\r\n".format(boundary) + \
                   "Content-Disposition: form-data; name=\"filefield\"; filename=\"test_file.json\"\r\n" + \
                   "Content-Type: application/json\r\n" + \
                   "\r\n" + \
                   "{\"test\": \"tests1\"}" + \
                   "\r\n" + \
-                  f"--{boundary}--\r\n"
+                  "--{}--\r\n".format(boundary)
 
         form_str = b''
         for i in body:
@@ -89,22 +89,22 @@ class TestClient(unittest.TestCase):
         }
         body = Client.to_file_form(form, boundary)
 
-        content = f"--{boundary}\r\n" + \
+        content = "--{}\r\n".format(boundary) + \
                   "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" + \
                   "string\r\n" + \
-                  f"--{boundary}\r\n" + \
+                  "--{}\r\n".format(boundary) + \
                   "Content-Disposition: form-data; name=\"filefield1\"; filename=\"test_file.json\"\r\n" + \
                   "Content-Type: application/json\r\n" + \
                   "\r\n" + \
                   "{\"test\": \"tests1\"}" + \
                   "\r\n" + \
-                  f"--{boundary}\r\n" + \
+                  "--{}\r\n".format(boundary) + \
                   "Content-Disposition: form-data; name=\"filefield2\"; filename=\"test.txt\"\r\n" + \
                   "Content-Type: application/json\r\n" + \
                   "\r\n" + \
                   "test1test2test3test4" + \
                   "\r\n" + \
-                  f"--{boundary}--\r\n"
+                  "--{}--\r\n".format(boundary)
         form_str = b''
         for i in body:
             form_str += i

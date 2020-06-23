@@ -31,9 +31,10 @@ class FileFormInputStream:
     def _build_str_forms(self):
         form_str = ''
         str_fmt = '--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n'
-        for k, v in self.forms.items():
-            # handle str
-            form_str += str_fmt % (self.boundary, k, v)
+        forms_list = sorted(list(self.forms))
+        for key in forms_list:
+            value = self.forms[key]
+            form_str += str_fmt % (self.boundary, key, value)
         self.form_str = form_str.encode('utf-8')
 
     def _get_stream_length(self):

@@ -1,4 +1,5 @@
 import unittest
+from io import BytesIO
 from alibabacloud_tea_fileform.client import Client
 from alibabacloud_tea_fileform.models import FileField
 
@@ -81,6 +82,53 @@ class TestClient(unittest.TestCase):
             filename='test.txt',
             content_type='application/json',
             content=f2
+        )
+        form = {
+            'stringkey': 'string',
+            'filefield1': file_field1,
+            'filefield2': file_field2
+        }
+        body = Client.to_file_form(form, boundary)
+
+        content = "--{}\r\n".format(boundary) + \
+                  "Content-Disposition: form-data; name=\"stringkey\"\r\n\r\n" + \
+                  "string\r\n" + \
+                  "--{}\r\n".format(boundary) + \
+                  "Content-Disposition: form-data; name=\"filefield1\"; filename=\"test_file.json\"\r\n" + \
+                  "Content-Type: application/json\r\n" + \
+                  "\r\n" + \
+                  "{\"test\": \"tests1\"}" + \
+                  "\r\n" + \
+                  "--{}\r\n".format(boundary) + \
+                  "Content-Disposition: form-data; name=\"filefield2\"; filename=\"test.txt\"\r\n" + \
+                  "Content-Type: application/json\r\n" + \
+                  "\r\n" + \
+                  "test1test2test3test4" + \
+                  "\r\n" + \
+                  "--{}--\r\n".format(boundary)
+        form_str = b''
+        for i in body:
+            form_str += i
+        self.assertEqual(content.encode(), form_str)
+        self.assertEqual(len(content.encode()), body.__len__())
+        form_str = b''
+        while True:
+            r = body.read(1)
+            if r:
+                form_str += r
+            else:
+                break
+        self.assertEqual(content.encode(), form_str)
+        self.assertEqual(len(content.encode()), body.__len__())
+        f2.close()
+
+        # TEST 4
+        f2 = open(file2, 'rb')
+        io = BytesIO(f2.read())
+        file_field2 = FileField(
+            filename='test.txt',
+            content_type='application/json',
+            content=io
         )
         form = {
             'stringkey': 'string',

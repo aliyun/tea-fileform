@@ -1,5 +1,6 @@
 import os
 import sys
+from _io import BytesIO
 
 from alibabacloud_tea_fileform.models import FileField
 
@@ -42,7 +43,10 @@ class FileFormInputStream:
         for k, ff in self.files.items():
             field_length = len(ff.filename.encode('utf-8')) + len(ff.content_type) +\
                            len(k.encode('utf-8')) + len(self.boundary) + 78
-            file_length += os.path.getsize(ff.content.name) + field_length
+            if isinstance(ff.content, BytesIO):
+                file_length += ff.content.getbuffer().nbytes + field_length
+            else:
+                file_length += os.path.getsize(ff.content.name) + field_length
 
         stream_length = self.str_length + file_length + len(self.boundary) + 6
         return stream_length
@@ -85,7 +89,12 @@ class FileFormInputStream:
                 if size <= 0:
                     break
                 file_field = self.files[key]
-                file_size = os.path.getsize(file_field.content.name)
+
+                if isinstance(file_field.content, BytesIO):
+                    file_size = file_field.content.getbuffer().nbytes
+                else:
+                    file_size = os.path.getsize(file_field.content.name)
+
                 self.file_size_left = file_size
                 file_content = file_field.content.read(size)
                 if isinstance(file_content, str):

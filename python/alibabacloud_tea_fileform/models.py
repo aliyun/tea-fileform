@@ -2,7 +2,7 @@ from Tea.model import TeaModel
 
 
 class FileField(TeaModel):
-    def __init__(self, filename, content_type, content):
+    def __init__(self, filename=None, content_type=None, content=None):
         self.filename = filename
         self.content_type = content_type
         self.content = content

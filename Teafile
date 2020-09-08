@@ -1,13 +1,13 @@
 {
   "scope": "darabonba",
   "name": "FileForm",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./main.tea",
   "releases": {
     "go": "github.com/alibabacloud-go/tea-fileform/service:v1.1.0",
     "csharp": "AlibabaCloud.SDK.TeaFileform:0.0.2",
     "ts": "@alicloud/tea-fileform:1.0.0",
-    "java": "com.aliyun:tea-fileform:0.0.2",
+    "java": "com.aliyun:tea-fileform:0.0.3",
     "php": "alibabacloud/tea-fileform:^0.3.0",
     "python": "alibabacloud_tea_fileform:0.0.3"
   },

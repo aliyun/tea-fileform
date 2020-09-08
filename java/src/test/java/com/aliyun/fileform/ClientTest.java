@@ -15,7 +15,7 @@ public class ClientTest {
     }
 
     @Test
-    public void toFileFormTest() throws Exception {
-        Assert.assertTrue(Client.toFileForm(new HashMap<>(), "test") instanceof FileFormInputStream);
+    public void toFileFormTest() {
+        Assert.assertTrue(Client.toFileForm(new HashMap<String, Object>(), "test") instanceof FileFormInputStream);
     }
 }

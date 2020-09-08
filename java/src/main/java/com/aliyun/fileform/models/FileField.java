@@ -3,6 +3,8 @@ package com.aliyun.fileform.models;
 
 import com.aliyun.tea.*;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class FileField extends TeaModel {
     @NameInMap("filename")
     @Validation(required = true)
@@ -16,9 +18,13 @@ public class FileField extends TeaModel {
     @Validation(required = true)
     public java.io.InputStream content;
 
-    public static FileField build(java.util.Map<String, ?> map) throws Exception {
+    public static FileField build(java.util.Map<String, ?> map) {
         FileField self = new FileField();
-        return TeaModel.build(map, self);
+        try {
+            return TeaModel.build(map, self);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 public class FileFormInputStreamTest {
     @Test
     public void readTest() throws Exception {
-        FileFormInputStream fileFormInputStream = new FileFormInputStream(new HashMap<>(), "test");
+        FileFormInputStream fileFormInputStream = new FileFormInputStream(new HashMap<String, Object>(), "test");
         Assert.assertEquals(-1, fileFormInputStream.read());
 
         fileFormInputStream.reset();

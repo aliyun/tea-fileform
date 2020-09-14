@@ -15,6 +15,21 @@ type FileField struct {
 	Content     io.Reader `json:"content" xml:"content" require:"true"`
 }
 
+func (s *FileField) SetFilename(v string) *FileField {
+	s.Filename = &v
+	return s
+}
+
+func (s *FileField) SetContentType(v string) *FileField {
+	s.ContentType = &v
+	return s
+}
+
+func (s *FileField) SetContent(v io.Reader) *FileField {
+	s.Content = v
+	return s
+}
+
 type FileFormReader struct {
 	formFiles []*formFile
 	formField io.Reader

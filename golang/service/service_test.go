@@ -16,13 +16,13 @@ type TestForm struct {
 }
 
 func Test_ToFileForm(t *testing.T) {
+	file1 := new(FileField).
+		SetContent(strings.NewReader("ok")).
+		SetContentType("jpg").
+		SetFilename("a.jpg")
 	body := map[string]interface{}{
-		"ak": "accesskey",
-		"file1": &FileField{
-			Filename:    tea.String("a.jpg"),
-			ContentType: tea.String("jpg"),
-			Content:     strings.NewReader("ok"),
-		},
+		"ak":    "accesskey",
+		"file1": file1,
 	}
 	res := ToFileForm(tea.ToMap(body), tea.String("28802961715230"))
 	byt, err := ioutil.ReadAll(res)

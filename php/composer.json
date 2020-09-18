@@ -13,7 +13,7 @@
     "php": ">5.5",
     "adbario/php-dot-notation": "^2.2",
     "alibabacloud/tea": "^3.0",
-    "guzzlehttp/guzzle": "^6.5"
+    "guzzlehttp/guzzle": "^6.5|^7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8.35|^5.4.3",

@@ -4,6 +4,9 @@ English | [简体中文](README-CN.md)
 
 # Alibaba Cloud Tea FileForm
 
+[![Travis Build Status](https://travis-ci.org/aliyun/tea-fileform.svg?branch=master)](https://travis-ci.org/aliyun/tea-fileform)
+[![codecov](https://codecov.io/gh/aliyun/tea-fileform/branch/master/graph/badge.svg)](https://codecov.io/gh/aliyun/tea-fileform)
+
 ## Installation
 
 - [Go](./golang/README.md)

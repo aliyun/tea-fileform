@@ -26,5 +26,13 @@
   "python": {
     "package": "alibabacloud_tea_fileform",
     "clientName": "client"
+  },
+  "cpp":  {
+    "packageInfo": {
+      "git": {
+        "scope": "alibabacloud-sdk-cpp",
+        "project": "dara-fileform"
+      }
+    }
   }
 }

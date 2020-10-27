@@ -32,6 +32,9 @@ shared_ptr<Darabonba_FileForm::FileFormStream> Darabonba_FileForm::Client::toFil
   return make_shared<Darabonba_FileForm::FileFormStream>();
 }
 
+bool Darabonba_FileForm::FileFormStream::empty() {
+  return _form.empty();
+}
 
 string Darabonba_FileForm::FileFormStream::read() {
   vector<string> stream_keys;

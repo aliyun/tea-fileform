@@ -4,28 +4,31 @@
 #define DARABONBA_FILEFORM_H_
 
 #include <boost/any.hpp>
+#include <boost/throw_exception.hpp>
 #include <darabonba/core.hpp>
 #include <iostream>
 #include <map>
-#include <utility>
 
 using namespace std;
 
 namespace Darabonba_FileForm {
 class FileField : public Darabonba::Model {
-protected:
-  void _init(){
-    _default = {
-      {"filename" , boost::any("")},
-      {"contentType" , boost::any("")},
-    };
-  }
 public:
-  FileField() {_init();};
-  explicit FileField(const std::map<string, boost::any> &config) : Darabonba::Model(config) {_init();};
+  FileField() {}
+  explicit FileField(const std::map<string, boost::any> &config) : Darabonba::Model(config) {
+    fromMap(config);
+  };
 
   void validate() override {
-
+    if (!filename) {
+      BOOST_THROW_EXCEPTION(boost::enable_error_info(std::runtime_error("filename is required.")));
+    }
+    if (!contentType) {
+      BOOST_THROW_EXCEPTION(boost::enable_error_info(std::runtime_error("contentType is required.")));
+    }
+    if (!content) {
+      BOOST_THROW_EXCEPTION(boost::enable_error_info(std::runtime_error("content is required.")));
+    }
   }
 
   map<string, boost::any> toMap() override {
@@ -58,7 +61,7 @@ public:
   shared_ptr<string> contentType{};
   shared_ptr<Darabonba::Stream> content{};
 
-  ~FileField() {};
+  ~FileField() = default;
 };
 
 
@@ -71,7 +74,7 @@ public:
     _form = std::move(form);
     _boundary = std::move(boundary);
   }
-
+  bool empty() override;
   string read() override;
 private:
   string _boundary;

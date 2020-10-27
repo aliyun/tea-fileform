@@ -46,6 +46,7 @@ if (ENABLE_UNIT_TESTS)
     message(STATUS "Enable coverage: ${ENABLE_COVERAGE}")
     if (ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         set(CMAKE_BUILD_TYPE "Coverage")
+        set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
         include(CodeCoverage)
         setup_target_for_coverage(${PROJECT_NAME}_coverage ${PROJECT_NAME}_test coverage)
     endif ()
@@ -57,8 +58,9 @@ endif ()
 
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< External set up >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> #
 add_subdirectory(external)
+find_package(Boost REQUIRED COMPONENTS random system thread filesystem chrono atomic date_time regex)
 find_library(CPPREST_LIB cpprest)
-target_link_libraries(${PROJECT_NAME} PRIVATE darabonba_core crypto ${CPPREST_LIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE crypto darabonba_core ${CPPREST_LIB})
 
 if (ENABLE_UNIT_TESTS)
     target_include_directories(tests_darabonba_file_form
@@ -68,10 +70,7 @@ if (ENABLE_UNIT_TESTS)
             PRIVATE
             ${PROJECT_NAME}
             gtest_main
-            gmock_main
-            crypto
-            darabonba_core
-            ${CPPREST_LIB})
+            gmock_main crypto darabonba_core ${CPPREST_LIB})
     add_test(NAME google_test
             COMMAND $<TARGET_FILE:tests_darabonba_file_form>)
 endif ()

@@ -2,14 +2,15 @@ import os
 import sys
 from _io import BytesIO
 
+from Tea.stream import BaseStream
 from alibabacloud_tea_fileform.models import FileField
 
 
-class FileFormInputStream:
+class FileFormInputStream(BaseStream):
     def __init__(self, form, boundary, size=1024):
+        super().__init__(size)
         self.form = form
         self.boundary = boundary
-        self.size = size
         self.file_size_left = 0
 
         self.forms = {}

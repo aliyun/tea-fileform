@@ -1,7 +1,7 @@
 {
   "scope": "darabonba",
   "name": "FileForm",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "./main.tea",
   "releases": {
     "go": "github.com/alibabacloud-go/tea-fileform/service:v1.1.1",

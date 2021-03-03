@@ -94,7 +94,7 @@ function run_python2 {
   # install
   cd python2 || return 126
   pip install coverage
-  pip install alibabacloud-tea-py2
+  python setup.py install
 
   coverage run --source="../alibabacloud_tea_fileform" -m pytest tests/ || return 126
   cd ../

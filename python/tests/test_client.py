@@ -1,13 +1,13 @@
 import unittest
+import os
+
 from io import BytesIO
 from alibabacloud_tea_fileform.client import Client
 from alibabacloud_tea_fileform.models import FileField
 
-# file1 = 'tests/test_file.json'
-# file2 = 'tests/test.txt'
-
-file1 = 'test_file.json'
-file2 = 'test.txt'
+root_path = os.path.dirname(os.path.dirname(__file__))
+file1 = os.path.join(root_path, 'tests/test_file.json')
+file2 = os.path.join(root_path, 'tests/test.txt')
 
 
 class TestClient(unittest.TestCase):

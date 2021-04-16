@@ -6,6 +6,16 @@ from Tea.stream import BaseStream
 from alibabacloud_tea_fileform.models import FileField
 
 
+def _length(o):
+    if hasattr(o, 'len'):
+        return o.len
+    elif isinstance(o, BytesIO):
+        return o.getbuffer().nbytes
+    elif hasattr(o, 'fileno'):
+        return os.path.getsize(o.name)
+    return len(o)
+
+
 class FileFormInputStream(BaseStream):
     def __init__(self, form, boundary, size=1024):
         super().__init__(size)
@@ -44,10 +54,8 @@ class FileFormInputStream(BaseStream):
         for k, ff in self.files.items():
             field_length = len(ff.filename.encode('utf-8')) + len(ff.content_type) +\
                            len(k.encode('utf-8')) + len(self.boundary) + 78
-            if isinstance(ff.content, BytesIO):
-                file_length += ff.content.getbuffer().nbytes + field_length
-            else:
-                file_length += os.path.getsize(ff.content.name) + field_length
+
+            file_length += _length(ff.content) + field_length
 
         stream_length = self.str_length + file_length + len(self.boundary) + 6
         return stream_length
@@ -91,11 +99,7 @@ class FileFormInputStream(BaseStream):
                     break
                 file_field = self.files[key]
 
-                if isinstance(file_field.content, BytesIO):
-                    file_size = file_field.content.getbuffer().nbytes
-                else:
-                    file_size = os.path.getsize(file_field.content.name)
-
+                file_size = _length(file_field.content)
                 self.file_size_left = file_size
                 file_content = file_field.content.read(size)
                 if isinstance(file_content, str):
@@ -145,7 +149,8 @@ class FileFormInputStream(BaseStream):
 
     def refresh_cursor(self):
         for ff in self.files.values():
-            ff.content.seek(0, 0)
+            if hasattr(ff.content, 'seek'):
+                ff.content.seek(0, 0)
 
     def refresh(self):
         self.file_size_left = 0

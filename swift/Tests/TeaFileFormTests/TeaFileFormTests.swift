@@ -43,10 +43,6 @@ final class TeaFileFormTests: XCTestCase {
         let target: String = "--testBoundary\r\nContent-Disposition: form-data; name=\"haveFile\"; filename=haveContent\r\nContent-Type: contentType\r\n\r\nThis is file test. This sentence must be long\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n\r\n\r\n\r\n--testBoundary\r\nContent-Disposition: form-data; name=\"testKey\"\r\n\r\ntestValue\r\n\r\n\r\n--testBoundary--\r\n"
         XCTAssertEqual(target, result)
     }
-
-    static var allTests = [
-        ("testFileFromStream", testFileFromStream)
-    ]
 }
 
 class TestObject {

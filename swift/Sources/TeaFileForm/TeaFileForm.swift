@@ -123,22 +123,12 @@ public class TeaFileForm {
 }
 
 public class FileField: TeaModel {
-    @objc public var filename: String?
-    @objc public var contentType: String?
-    @objc public var content: Data?
+    public var filename: String?
+    public var contentType: String?
+    public var content: Data?
 
     public override init() {
         super.init()
-        self.__name = [
-            "filename": "filename",
-            "contentType": "contentType",
-            "content": "content"
-        ];
-        self.__required = [
-            "filename": true,
-            "contentType": true,
-            "content": true
-        ]
     }
 }
 
@@ -146,7 +136,7 @@ extension String {
     static func randomString(len: Int, randomDict: String = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") -> String {
         var ranStr = ""
         for _ in 0..<len {
-            let index = Int(arc4random_uniform(UInt32(randomDict.count)))
+            let index = Int.random(in: 0..<randomDict.count)
             ranStr.append(randomDict[randomDict.index(randomDict.startIndex, offsetBy: index)])
         }
         return ranStr

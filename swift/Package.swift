@@ -15,7 +15,7 @@ let package = Package(
             targets: ["TeaFileForm"])
     ],
     dependencies: [
-        .package(url: "https://github.com/aliyun/tea-swift.git", from: "1.0.0"),
+        .package(url: "https://github.com/aliyun/tea-swift.git", from: "1.0.2"),
     ],
     targets: [
         .target(

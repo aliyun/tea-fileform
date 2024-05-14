@@ -11,7 +11,7 @@ English | [简体中文](README-CN.md)
 [CocoaPods](https://cocoapods.org) is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate `TeaFileForm` into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-pod 'TeaFileForm', '~> 0.1.0'
+pod 'TeaFileForm', '~> 1.0.0'
 ```
 
 ### Carthage
@@ -19,7 +19,7 @@ pod 'TeaFileForm', '~> 0.1.0'
 To integrate `TeaFileForm` into your Xcode project using [Carthage](https://github.com/Carthage/Carthage), specify it in your `Cartfile`:
 
 ```ogdl
-github "alibabacloud-sdk-swift/tea-fileform" "0.1.0"
+github "alibabacloud-sdk-swift/tea-fileform" "1.0.0"
 ```
 
 ### Swift Package Manager
@@ -28,7 +28,7 @@ To integrate `TeaFileForm` into your Xcode project using [Swift Package Manager]
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/alibabacloud-sdk-swift/tea-fileform.git", from: "0.1.0")
+    .package(url: "https://github.com/alibabacloud-sdk-swift/tea-fileform.git", from: "1.0.0")
 ]
 ```
 

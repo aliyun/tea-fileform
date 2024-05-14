@@ -1,7 +1,7 @@
 {
   "scope": "darabonba",
   "name": "FileForm",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "./main.tea",
   "releases": {
     "go": "github.com/alibabacloud-go/tea-fileform/service:v1.1.1",
@@ -10,7 +10,8 @@
     "java": "com.aliyun:tea-fileform:0.0.3",
     "php": "alibabacloud/tea-fileform:^0.3.0",
     "python": "alibabacloud_tea_fileform:0.0.3",
-    "python2": "alibabacloud_tea_fileform_py2:0.0.1"
+    "python2": "alibabacloud_tea_fileform_py2:0.0.1",
+    "swift": "alibabacloud-sdk-swift/tea-fileform:1.0.0"
   },
   "java": {
     "package": "com.aliyun.fileform"
@@ -39,5 +40,15 @@
         "project": "dara-fileform"
       }
     }
-  }
+  },
+  "swift": {
+		"clientName": "TeaFileForm",
+		"packageInfo": {
+			"name": "TeaFileForm",
+			"desc": "Alibaba Cloud Tea FileForm for Swift",
+			"github": "https://github.com/alibabacloud-sdk-swift/tea-fileform",
+			"author": "Alibaba Cloud SDK",
+			"email": "sdk-team@alibabacloud.com"
+		}
+	}
 }

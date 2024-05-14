@@ -42,7 +42,7 @@
     }
   },
   "swift": {
-		"clientName": "TeaFileForm",
+		"clientName": "Client",
 		"packageInfo": {
 			"name": "TeaFileForm",
 			"desc": "Alibaba Cloud Tea FileForm for Swift",

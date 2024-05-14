@@ -94,4 +94,5 @@ iOSInjectionProject/
 # Others
 .DS_Store
 *.txt
-
+.idea/
+.vscode/

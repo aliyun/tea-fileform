@@ -17,7 +17,7 @@ final class TeaFileFormTests: XCTestCase {
         let fileField = FileField()
         fileField.filename = "haveContent"
         fileField.contentType = "contentType"
-        fileField.content = Data("This is file test. This sentence must be long".toBytes())
+        fileField.content = InputStream(data: Data("This is file test. This sentence must be long".toBytes()))
 
         let fileFieldNoContent = FileField()
         fileFieldNoContent.filename = "noContent"

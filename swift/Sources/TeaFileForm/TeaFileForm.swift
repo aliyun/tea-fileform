@@ -1,17 +1,6 @@
 import Foundation
 import Tea
 
-public class Client {
-    public static func getBoundary() -> String {
-        "1" + String.randomString(len: 31, randomDict: "0123456789")
-    }
-
-    public static func toFileForm(_ map: [String: Any], _ boundary: String) -> TeaFileForm {
-        let fileForm = TeaFileForm(map, boundary);
-        return fileForm;
-    }
-}
-
 public class TeaFileForm {
     private var form: [String: Any]
     private var keys: [String]
@@ -31,6 +20,22 @@ public class TeaFileForm {
         self.index = 0
         self.boundary = boundary
         self.streaming = false
+    }
+
+    private func readToData(_ stream: InputStream?) -> Data {
+        stream?.open()
+        defer { stream?.close() }
+        let bufferSize = 1024
+        var buffer : [UInt8] = [UInt8](repeating: 0, count: bufferSize)
+        var data = Data()
+        while stream != nil && stream!.hasBytesAvailable {
+            let read = stream!.read(&buffer, maxLength: bufferSize)
+            if read <= 0 {
+                break
+            }
+            data.append(buffer, count: read)
+        }
+        return data
     }
 
     public func read(_ off: Int, _ count: Int) -> Int {
@@ -71,7 +76,7 @@ public class TeaFileForm {
                         ]
                         let body: [UInt8] = tmp.joined().toBytes()
                         self.bytes = self.bytes + body
-                        self.stream = field?.content!
+                        self.stream = self.readToData(field?.content)
                         return body.count
                     } else {
                         return self.next(endStr: "\r\n")
@@ -119,16 +124,6 @@ public class TeaFileForm {
 
     public func getData() -> Data {
         Data(self.bytes)
-    }
-}
-
-public class FileField: TeaModel {
-    public var filename: String?
-    public var contentType: String?
-    public var content: Data?
-
-    public override init() {
-        super.init()
     }
 }
 

@@ -13,7 +13,9 @@ else()
     _darabonba_core
     GIT_REPOSITORY https://github.com/aliyun/tea-cpp.git
     GIT_TAG 4cdc0046a3c105b23c7065a469aeab51d714c8ae
-    PATCH_COMMAND "${GIT_EXECUTABLE}" apply "${CMAKE_CURRENT_LIST_DIR}/qualify-make-shared.patch")
+    PATCH_COMMAND "${CMAKE_COMMAND}"
+      "-DGIT_EXECUTABLE=${GIT_EXECUTABLE}"
+      -P "${CMAKE_CURRENT_LIST_DIR}/apply-patch.cmake")
   
   FetchContent_GetProperties(_darabonba_core)
   if(NOT _darabonba_core_POPULATED)

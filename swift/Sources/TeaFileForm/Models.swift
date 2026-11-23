@@ -37,15 +37,16 @@ public class FileField : Tea.TeaModel {
         return map
     }
 
-    public override func fromMap(_ dict: [String: Any]) -> Void {
-        if dict.keys.contains("filename") && dict["filename"] != nil {
-            self.filename = dict["filename"] as! String
+    public override func fromMap(_ dict: [String: Any?]?) -> Void {
+        guard let dict = dict else { return }
+        if let filename = dict["filename"] as? String {
+            self.filename = filename
         }
-        if dict.keys.contains("contentType") && dict["contentType"] != nil {
-            self.contentType = dict["contentType"] as! String
+        if let contentType = dict["contentType"] as? String {
+            self.contentType = contentType
         }
-        if dict.keys.contains("content") && dict["content"] != nil {
-            self.content = dict["content"] as! InputStream
+        if let content = dict["content"] as? InputStream {
+            self.content = content
         }
     }
 }

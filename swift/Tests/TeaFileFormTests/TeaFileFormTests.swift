@@ -1,4 +1,5 @@
 import Foundation
+import Tea
 import XCTest
 @testable import TeaFileForm
 
@@ -9,6 +10,29 @@ final class TeaFileFormTests: XCTestCase {
         XCTAssertEqual(32, boundary.toBytes().count)
         let stream: InputStream = Client.toFileForm([String: Any](), boundary)
         XCTAssertFalse(stream.hasBytesAvailable)
+    }
+
+    func testFileFieldFromMapThroughTeaModel() throws {
+        let file = FileField()
+        let model: TeaModel = file
+        let content = InputStream(data: Data([0x00, 0xff, 0x0d, 0x0a]))
+
+        model.fromMap(nil)
+        XCTAssertNil(file.filename)
+        model.fromMap([
+            "filename": "payload.bin",
+            "contentType": "application/octet-stream",
+            "content": content
+        ])
+        try file.validate()
+        XCTAssertEqual(file.filename, "payload.bin")
+        XCTAssertEqual(file.contentType, "application/octet-stream")
+        XCTAssertTrue(file.content === content)
+
+        model.fromMap(["filename": nil, "contentType": "application/custom"])
+        XCTAssertEqual(file.filename, "payload.bin")
+        XCTAssertEqual(file.contentType, "application/custom")
+        XCTAssertTrue(file.content === content)
     }
 
     func testRead() {

@@ -17,7 +17,7 @@ Pod::Spec.new do |spec|
   spec.watchos.deployment_target = '6.0'
   spec.tvos.deployment_target    = '13.0'
 
-  spec.dependency 'Tea',  '~> 1.0.2'
+  spec.dependency 'Tea',  '~> 1.0.3'
 
   spec.swift_version='5.6'
 end

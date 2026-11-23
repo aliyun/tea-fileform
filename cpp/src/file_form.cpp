@@ -27,7 +27,7 @@ string Darabonba_FileForm::Client::getBoundary() {
 shared_ptr<Darabonba_FileForm::FileFormStream> Darabonba_FileForm::Client::toFileForm(shared_ptr<map<string, boost::any>> form,
                                                                                       shared_ptr<string> boundary) {
   if (boundary && form) {
-    return make_shared<Darabonba_FileForm::FileFormStream>(*form, *boundary);
+    return std::make_shared<Darabonba_FileForm::FileFormStream>(*form, *boundary);
   }
   return make_shared<Darabonba_FileForm::FileFormStream>();
 }

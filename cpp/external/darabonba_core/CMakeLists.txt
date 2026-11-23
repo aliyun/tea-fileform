@@ -6,11 +6,14 @@ if(darabonba_core_FOUND)
 else()
   message(STATUS "darabonba_core ${darabonba_core_MINIMUM_REQUIRED} could not be located, Building darabonba_core instead.")
   include(FetchContent)
+  find_package(Git REQUIRED)
 
+  # FileForm still uses the legacy Tea C++ API.
   FetchContent_Declare(
     _darabonba_core
     GIT_REPOSITORY https://github.com/aliyun/tea-cpp.git
-    GIT_TAG master)
+    GIT_TAG 4cdc0046a3c105b23c7065a469aeab51d714c8ae
+    PATCH_COMMAND "${GIT_EXECUTABLE}" apply "${CMAKE_CURRENT_LIST_DIR}/qualify-make-shared.patch")
   
   FetchContent_GetProperties(_darabonba_core)
   if(NOT _darabonba_core_POPULATED)

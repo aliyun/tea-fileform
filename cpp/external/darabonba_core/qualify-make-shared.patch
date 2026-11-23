@@ -1,0 +1,7 @@
+--- a/include/darabonba/core.hpp
++++ b/include/darabonba/core.hpp
+@@ -166,3 +166,3 @@
+   mapPointer(map<string, boost::any> m) {
+-    return make_shared<map<string, boost::any>>(m);
++    return std::make_shared<map<string, boost::any>>(m);
+   }
